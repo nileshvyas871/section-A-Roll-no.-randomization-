@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Roll Number Picker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #fff;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 90%;
+            max-width: 500px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .display-box {
+            font-size: 48px;
+            font-weight: bold;
+            height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 2px solid #00d2ff;
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.2);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .spinning {
+            animation: pulse 0.1s infinite;
+            color: #00d2ff;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .btn {
+            background: #00d2ff;
+            color: #1e3c72;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 210, 255, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 210, 255, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .instruction {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #ccc;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Roll Number Picker</h1>
+        <div id="display" class="display-box">Click Spin</div>
+        <button id="spinBtn" class="btn">SPIN WHEEL</button>
+        <p class="instruction">Tip: Aap mouse ke wheel/scroll se bhi ghumate hi spin kar sakte hain!</p>
+    </div>
+
+    <script>
+        const display = document.getElementById('display');
+        const spinBtn = document.getElementById('spinBtn');
+        let isSpinning = false;
+
+        // 1 se 62 tak ki list jisme 61 aur 62 par naam hain
+        const dataList = [];
+        for (let i = 1; i <= 60; i++) {
+            dataList.push("Roll No. " + i);
+        }
+        dataList.push("61: Ritika");
+        dataList.push("62: Nitin");
+
+        function spin() {
+            if (isSpinning) return;
+            isSpinning = true;
+            display.classList.add('spinning');
+            
+            let counter = 0;
+            const duration = 2000; // 2 seconds tak ghumega
+            const intervalTime = 50; // Har 50ms me number badlega
+            
+            const spinInterval = setInterval(() => {
+                // Random index pick karna animation ke liye
+                const randomIndex = Math.floor(Math.random() * dataList.length);
+                display.innerText = dataList[randomIndex];
+            }, intervalTime);
+
+            // Final result ke liye stop karna
+            setTimeout(() => {
+                clearInterval(spinInterval);
+                display.classList.remove('spinning');
+                
+                // Final random selection
+                const finalIndex = Math.floor(Math.random() * dataList.length);
+                display.innerText = dataList[finalIndex];
+                
+                isSpinning = false;
+            }, duration);
+        }
+
+        // Button click par chalega
+        spinBtn.addEventListener('click', spin);
+
+        // Mouse scroll/wheel ghumane par bhi chalega
+        window.addEventListener('wheel', (e) => {
+            spin();
+        });
+    </script>
+</body>
+</html>
